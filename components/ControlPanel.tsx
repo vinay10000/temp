@@ -1,7 +1,14 @@
 "use client";
 
+import type { ColorMode } from "./types";
+
 type CharsetPreset = {
   key: string;
+  label: string;
+};
+
+type ColorModeOption = {
+  key: ColorMode;
   label: string;
 };
 
@@ -11,9 +18,11 @@ type ControlPanelProps = {
   resolution: number;
   charsetPreset: string;
   charsetPresets: CharsetPreset[];
-  colorMode: "matrix" | "original";
+  colorMode: ColorMode;
+  colorModes: ColorModeOption[];
   brightness: number;
   contrast: number;
+  blockSize: number;
   fpsLimitEnabled: boolean;
   fps: number;
   hasFrame: boolean;
@@ -21,9 +30,10 @@ type ControlPanelProps = {
   onToggleMirror: () => void;
   onResolutionChange: (value: number) => void;
   onCharsetPresetChange: (value: string) => void;
-  onToggleColorMode: () => void;
+  onColorModeChange: (value: ColorMode) => void;
   onBrightnessChange: (value: number) => void;
   onContrastChange: (value: number) => void;
+  onBlockSizeChange: (value: number) => void;
   onToggleFpsLimit: () => void;
   onDownloadText: () => void;
   onDownloadImage: () => void;
@@ -37,8 +47,10 @@ export function ControlPanel({
   charsetPreset,
   charsetPresets,
   colorMode,
+  colorModes,
   brightness,
   contrast,
+  blockSize,
   fpsLimitEnabled,
   fps,
   hasFrame,
@@ -46,9 +58,10 @@ export function ControlPanel({
   onToggleMirror,
   onResolutionChange,
   onCharsetPresetChange,
-  onToggleColorMode,
+  onColorModeChange,
   onBrightnessChange,
   onContrastChange,
+  onBlockSizeChange,
   onToggleFpsLimit,
   onDownloadText,
   onDownloadImage,
@@ -84,11 +97,6 @@ export function ControlPanel({
       </label>
 
       <label className="control-row">
-        <span>Color Mode ({colorMode})</span>
-        <input checked={colorMode === "original"} onChange={onToggleColorMode} type="checkbox" />
-      </label>
-
-      <label className="control-row">
         <span>FPS Limiter (15)</span>
         <input checked={fpsLimitEnabled} onChange={onToggleFpsLimit} type="checkbox" />
       </label>
@@ -119,6 +127,34 @@ export function ControlPanel({
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="space-y-1 block">
+        <span className="control-label">Color Effect</span>
+        <select
+          value={colorMode}
+          onChange={(event) => onColorModeChange(event.target.value as ColorMode)}
+          className="w-full rounded border border-emerald-400/40 bg-black/50 p-2"
+        >
+          {colorModes.map((mode) => (
+            <option key={mode.key} value={mode.key}>
+              {mode.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="space-y-1 block">
+        <span className="control-label">Block Size: {blockSize}px</span>
+        <input
+          type="range"
+          min={6}
+          max={16}
+          step={1}
+          value={blockSize}
+          onChange={(event) => onBlockSizeChange(Number(event.target.value))}
+          className="w-full"
+        />
       </label>
 
       <label className="space-y-1 block">

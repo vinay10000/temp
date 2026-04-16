@@ -5,7 +5,7 @@ import { ASCIIOutput } from "@/components/ASCIIOutput";
 import { CameraCanvas } from "@/components/CameraCanvas";
 import { ControlPanel } from "@/components/ControlPanel";
 import { MatrixRain } from "@/components/MatrixRain";
-import type { AsciiFrame } from "@/components/types";
+import type { AsciiFrame, ColorMode } from "@/components/types";
 
 const CHARSET_PRESETS = {
   dense: "@#S%?*+;:,. ",
@@ -29,9 +29,10 @@ export default function Home() {
   const [mirror, setMirror] = useState(true);
   const [resolution, setResolution] = useState(120);
   const [charsetPreset, setCharsetPreset] = useState<keyof typeof CHARSET_PRESETS>("dense");
-  const [colorMode, setColorMode] = useState<"matrix" | "original">("matrix");
+  const [colorMode, setColorMode] = useState<ColorMode>("matrix");
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
+  const [blockSize, setBlockSize] = useState(8);
   const [fpsLimitEnabled, setFpsLimitEnabled] = useState(true);
   const [fps, setFps] = useState(0);
   const [frame, setFrame] = useState<AsciiFrame | null>(null);
@@ -41,6 +42,17 @@ export default function Home() {
       { key: "dense", label: "Dense" },
       { key: "minimal", label: "Minimal" },
       { key: "matrix", label: "Matrix" },
+    ],
+    []
+  );
+
+  const colorModes = useMemo(
+    () => [
+      { key: "matrix" as const, label: "Matrix Green" },
+      { key: "original" as const, label: "Original Color" },
+      { key: "grayscale" as const, label: "Grayscale" },
+      { key: "amber" as const, label: "Amber Terminal" },
+      { key: "inverted" as const, label: "Inverted" },
     ],
     []
   );
@@ -58,8 +70,8 @@ export default function Home() {
     const colCount = frame.rows[0]?.length ?? 0;
     if (!rowCount || !colCount) return;
 
-    const charWidth = 8;
-    const charHeight = 12;
+    const charWidth = Math.max(4, Math.round(blockSize * 0.66));
+    const charHeight = Math.max(6, Math.round(blockSize * 1.1));
 
     const canvas = document.createElement("canvas");
     canvas.width = colCount * charWidth + 20;
@@ -69,7 +81,7 @@ export default function Home() {
 
     context.fillStyle = "#000";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    context.font = "12px 'Courier New', monospace";
+    context.font = `${blockSize}px 'Courier New', monospace`;
 
     frame.rows.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
@@ -114,8 +126,10 @@ export default function Home() {
             charsetPreset={charsetPreset}
             charsetPresets={charsetPresets}
             colorMode={colorMode}
+            colorModes={colorModes}
             brightness={brightness}
             contrast={contrast}
+            blockSize={blockSize}
             fpsLimitEnabled={fpsLimitEnabled}
             fps={fps}
             hasFrame={Boolean(frame)}
@@ -123,9 +137,10 @@ export default function Home() {
             onToggleMirror={() => setMirror((current) => !current)}
             onResolutionChange={setResolution}
             onCharsetPresetChange={(value) => setCharsetPreset(value as keyof typeof CHARSET_PRESETS)}
-            onToggleColorMode={() => setColorMode((current) => (current === "matrix" ? "original" : "matrix"))}
+            onColorModeChange={setColorMode}
             onBrightnessChange={setBrightness}
             onContrastChange={setContrast}
+            onBlockSizeChange={setBlockSize}
             onToggleFpsLimit={() => setFpsLimitEnabled((current) => !current)}
             onDownloadText={handleDownloadText}
             onDownloadImage={handleDownloadImage}
@@ -134,7 +149,7 @@ export default function Home() {
             }}
           />
 
-          <ASCIIOutput frame={frame} colorMode={colorMode} loading={loading} error={error} />
+          <ASCIIOutput frame={frame} colorMode={colorMode} blockSize={blockSize} loading={loading} error={error} />
         </div>
       </div>
 
