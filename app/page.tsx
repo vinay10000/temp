@@ -97,12 +97,12 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black px-4 py-6 text-[#00ff9f] sm:px-8">
+    <main className="relative min-h-screen overflow-x-hidden bg-black px-3 py-4 text-[#00ff9f] sm:px-6 sm:py-6 lg:px-8">
       <MatrixRain active={!running} />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-4">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-3 sm:gap-4">
         <header className="glass-panel rounded-xl border border-emerald-300/30 p-4 text-center">
-          <h1 className="ascii-glow text-xl font-bold tracking-[0.2em] sm:text-2xl">REAL-TIME ASCII CAMERA</h1>
+          <h1 className="ascii-glow text-lg font-bold tracking-[0.12em] sm:text-xl sm:tracking-[0.18em] lg:text-2xl">REAL-TIME ASCII CAMERA</h1>
           <p className="mt-1 text-xs text-emerald-300/80 sm:text-sm">Cyberpunk webcam renderer with live Matrix terminal output</p>
         </header>
 

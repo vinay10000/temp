@@ -30,7 +30,7 @@ body {
 }
 
 .control-btn {
-  @apply rounded border border-emerald-300/40 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-200 transition hover:bg-emerald-300/20 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply min-h-11 rounded border border-emerald-300/40 bg-emerald-400/10 px-3 py-2 font-semibold tracking-wide text-emerald-200 transition hover:bg-emerald-300/20 disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .control-row {

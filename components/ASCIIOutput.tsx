@@ -47,9 +47,9 @@ export function ASCIIOutput({ frame, colorMode, loading, error }: ASCIIOutputPro
   }, [frame, colorMode]);
 
   return (
-    <div className="relative overflow-auto rounded-xl border border-emerald-400/30 bg-black/70 p-4 shadow-[0_0_35px_rgba(0,255,159,0.2)] backdrop-blur-sm min-h-[300px]">
+    <div className="relative min-h-[260px] max-h-[65vh] overflow-auto rounded-xl border border-emerald-400/30 bg-black/70 p-3 shadow-[0_0_35px_rgba(0,255,159,0.2)] backdrop-blur-sm sm:min-h-[300px] sm:max-h-none sm:p-4">
       <pre
-        className="ascii-output m-0 font-mono text-[8px] leading-[0.85] text-[#00ff9f] sm:text-[10px]"
+        className="ascii-output m-0 font-mono text-[7px] leading-[0.85] text-[#00ff9f] sm:text-[9px] lg:text-[10px]"
         dangerouslySetInnerHTML={{
           __html:
             renderedAscii ||

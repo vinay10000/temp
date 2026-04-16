@@ -56,14 +56,14 @@ export function ControlPanel({
 }: ControlPanelProps) {
   return (
     <aside className="glass-panel space-y-4 rounded-xl border border-emerald-300/30 p-4 text-xs sm:text-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold tracking-widest text-emerald-200">CONTROL PANEL</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold tracking-[0.18em] text-emerald-200 sm:text-base sm:tracking-widest">CONTROL PANEL</h2>
         <span className="rounded-full border border-emerald-400/40 px-2 py-0.5 text-emerald-300">
           {fps.toFixed(1)} FPS
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <button className="control-btn" onClick={onToggleRunning} type="button">
           {running ? "STOP CAMERA" : "START CAMERA"}
         </button>
