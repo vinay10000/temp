@@ -140,6 +140,9 @@ export function CameraCanvas({
 
             for (let x = 0; x < cols; x += 1) {
               const index = (y * cols + x) * 4;
+              if (index + 2 >= imageData.length) {
+                continue;
+              }
               const red = applyAdjustments(imageData[index]);
               const green = applyAdjustments(imageData[index + 1]);
               const blue = applyAdjustments(imageData[index + 2]);

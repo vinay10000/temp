@@ -52,6 +52,7 @@ export default function Home() {
 
   const handleDownloadImage = () => {
     if (!frame) return;
+    if (frame.rows.length === 0) return;
 
     const rowCount = frame.rows.length;
     const colCount = frame.rows[0]?.length ?? 0;
