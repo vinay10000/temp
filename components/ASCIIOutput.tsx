@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import type { AsciiFrame } from "./types";
+import type { AsciiFrame, ColorMode } from "./types";
 
 type ASCIIOutputProps = {
   frame: AsciiFrame | null;
-  colorMode: "matrix" | "original";
+  colorMode: ColorMode;
+  blockSize: number;
   loading: boolean;
   error: string | null;
 };
@@ -23,8 +24,7 @@ const sanitizeColor = (value: string) =>
     ? value
     : "#00ff9f";
 
-export function ASCIIOutput({ frame, colorMode, loading, error }: ASCIIOutputProps) {
-
+export function ASCIIOutput({ frame, colorMode, blockSize, loading, error }: ASCIIOutputProps) {
   const renderedAscii = useMemo(() => {
     if (!frame) {
       return "";
@@ -49,7 +49,8 @@ export function ASCIIOutput({ frame, colorMode, loading, error }: ASCIIOutputPro
   return (
     <div className="relative overflow-auto rounded-xl border border-emerald-400/30 bg-black/70 p-4 shadow-[0_0_35px_rgba(0,255,159,0.2)] backdrop-blur-sm min-h-[300px]">
       <pre
-        className="ascii-output m-0 font-mono text-[8px] leading-[0.85] text-[#00ff9f] sm:text-[10px]"
+        className="ascii-output m-0 font-mono text-[#00ff9f]"
+        style={{ fontSize: `${blockSize}px`, lineHeight: `${Math.max(6, Math.round(blockSize * 0.85))}px` }}
         dangerouslySetInnerHTML={{
           __html:
             renderedAscii ||

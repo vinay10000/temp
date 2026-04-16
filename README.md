@@ -9,8 +9,9 @@ A Next.js (App Router) + Tailwind CSS web app that renders your webcam feed as l
 - Mirror mode toggle
 - Resolution slider
 - Charset presets (dense, minimal, matrix)
-- Matrix/original color mode
+- Multiple color effects (matrix, original, grayscale, amber, inverted)
 - Brightness and contrast controls
+- Block size (font size) control
 - TXT and PNG export
 - FPS limiter toggle + FPS indicator
 - Fullscreen mode

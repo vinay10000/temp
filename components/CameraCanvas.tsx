@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { AsciiFrame } from "./types";
+import type { AsciiFrame, ColorMode } from "./types";
 
 type CameraCanvasProps = {
   running: boolean;
   mirror: boolean;
   resolution: number;
   charset: string;
-  colorMode: "matrix" | "original";
+  colorMode: ColorMode;
   brightness: number;
   contrast: number;
   fpsLimitEnabled: boolean;
@@ -19,6 +19,26 @@ type CameraCanvasProps = {
 };
 
 const clampColor = (value: number) => Math.max(0, Math.min(255, Math.round(value)));
+
+const getColorByMode = (mode: ColorMode, red: number, green: number, blue: number) => {
+  switch (mode) {
+    case "matrix":
+      return "#00ff9f";
+    case "grayscale": {
+      const gray = clampColor(0.299 * red + 0.587 * green + 0.114 * blue);
+      return `rgb(${gray}, ${gray}, ${gray})`;
+    }
+    case "amber": {
+      const gray = clampColor(0.299 * red + 0.587 * green + 0.114 * blue);
+      return `rgb(${gray}, ${clampColor(gray * 0.75)}, 0)`;
+    }
+    case "inverted":
+      return `rgb(${255 - red}, ${255 - green}, ${255 - blue})`;
+    case "original":
+    default:
+      return `rgb(${red}, ${green}, ${blue})`;
+  }
+};
 
 export function CameraCanvas({
   running,
@@ -155,7 +175,7 @@ export function CameraCanvas({
               textLineChars.push(char);
               row.push({
                 char,
-                color: colorMode === "original" ? `rgb(${red}, ${green}, ${blue})` : "#00ff9f",
+                color: getColorByMode(colorMode, red, green, blue),
               });
             }
 
