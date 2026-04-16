@@ -140,7 +140,7 @@ export function CameraCanvas({
 
             for (let x = 0; x < cols; x += 1) {
               const index = (y * cols + x) * 4;
-              if (index + 2 >= imageData.length) {
+              if (index + 3 >= imageData.length) {
                 continue;
               }
               const red = applyAdjustments(imageData[index]);
@@ -150,7 +150,7 @@ export function CameraCanvas({
 
               const charIndex = Math.floor((grayscale / 255) * (charset.length - 1));
               const safeIndex = Math.max(0, Math.min(charset.length - 1, charIndex));
-              const char = charset[safeIndex] ?? " ";
+              const char = charset[safeIndex];
 
               textLineChars.push(char);
               row.push({
@@ -184,9 +184,15 @@ export function CameraCanvas({
         };
 
         rafRef.current = requestAnimationFrame(render);
-      } catch {
+      } catch (error) {
         onLoadingChange(false);
-        onError("Unable to access camera. Please allow webcam permissions.");
+        if (error instanceof DOMException && error.name === "NotAllowedError") {
+          onError("Camera permission denied. Please allow webcam access.");
+        } else if (error instanceof DOMException && error.name === "NotFoundError") {
+          onError("No camera detected on this device.");
+        } else {
+          onError("Unable to access camera. Please check webcam permissions and availability.");
+        }
         onFpsUpdate(0);
       }
     };

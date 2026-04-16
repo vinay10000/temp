@@ -18,7 +18,13 @@ const escapeHtml = (value: string) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
+const sanitizeColor = (value: string) =>
+  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$|^rgb\(\d{1,3},\s\d{1,3},\s\d{1,3}\)$/.test(value)
+    ? value
+    : "#00ff9f";
+
 export function ASCIIOutput({ frame, colorMode, loading, error }: ASCIIOutputProps) {
+
   const renderedAscii = useMemo(() => {
     if (!frame) {
       return "";
@@ -31,7 +37,10 @@ export function ASCIIOutput({ frame, colorMode, loading, error }: ASCIIOutputPro
     return frame.rows
       .map((row) =>
         row
-          .map((cell) => `<span style=\"color:${cell.color}\">${escapeHtml(cell.char)}</span>`)
+          .map(
+            (cell) =>
+              `<span style=\"color:${sanitizeColor(cell.color)}\">${escapeHtml(cell.char)}</span>`
+          )
           .join("")
       )
       .join("<br/>");

@@ -19,7 +19,7 @@ const downloadBlob = (blob: Blob, filename: string) => {
   link.href = url;
   link.download = filename;
   link.click();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
 export default function Home() {
@@ -85,11 +85,15 @@ export default function Home() {
   };
 
   const toggleFullscreen = async () => {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
-      return;
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+        return;
+      }
+      await document.exitFullscreen();
+    } catch {
+      setError("Fullscreen is unavailable in this browser context.");
     }
-    await document.exitFullscreen();
   };
 
   return (

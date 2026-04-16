@@ -49,7 +49,7 @@ export function MatrixRain({ active }: MatrixRainProps) {
       context.font = "14px 'Courier New', monospace";
 
       for (let index = 0; index < drops.length; index += 1) {
-        const text = chars[Math.floor(Math.random() * chars.length)] ?? "0";
+        const text = chars[Math.floor(Math.random() * chars.length)];
         context.fillText(text, index * 14, drops[index] * 14);
 
         if (drops[index] * 14 > canvas.height && Math.random() > 0.975) {
